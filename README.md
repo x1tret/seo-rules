@@ -16,16 +16,20 @@ Supports the following rules
 
 ### Installation
 
+#### From npm
+
+comming soon
+
 #### From GitHub
 
 ```sh
-$ git clone git@github.com:x1tret/seo-rules.git
+$ npm install git+ssh://git@github.com:x1tret/seo-rules.git
 ```
 
-Then cd into directory and run the setup script
+or
 
 ```sh
-$ npm run setup
+$ npm install git+https://git@github.com:x1tret/seo-rules.git
 ```
 
 ### Usage
@@ -48,12 +52,8 @@ const options = {
   rules: 'all'
 }
 
-try {
-  result = validator(options);
-  console.log(result);
-} catch (e) {
-  console.log(e.message);
-}
+result = validator(options);
+console.log(result);
 
 ```
 
@@ -67,12 +67,8 @@ const options = {
   rules: ['strong','header_meta']
 }
 
-try {
-  result = validator(options);
-  console.log(result);
-} catch (e) {
-  console.log(e.message);
-}
+result = validator(options);
+console.log(result);
 
 ```
 
@@ -86,12 +82,8 @@ const options = {
   rules: [{name:'strong', option:20}]
 }
 
-try {
-  result = validator(options);
-  console.log(result);
-} catch (e) {
-  console.log(e.message);
-}
+result = validator(options);
+console.log(result);
 
 ```
 

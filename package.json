@@ -1,0 +1,28 @@
+{
+  "name": "seo-rules",
+  "version": "2.2.3",
+  "description": "It's just a Node.js Code Challenge",
+  "license": "MIT",
+  "author": {
+    "name": "Tai Nguyen",
+    "email": "contact@ductai.me",
+    "url": "http://ductai.me"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.4.0"
+  },
+  "scripts": {
+    "setup": "npm install",
+    "test": "tap --reporter=spec test/*.js",
+    "coverage": "tap test/*.js --coverage"
+  },
+  "keywords": [
+    "seo-rules",
+    "validation"
+  ],
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "tap": "^11.1.1"
+  }
+}

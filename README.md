@@ -5,14 +5,14 @@ A [Node.js](https://nodejs.org/) module for validating html
 ## Module
 
 Supports the following rules
-1. Detect if there are any <img /> tags without alt attribute
-2. Detect if there are any <a /> tags without rel attribute
-3. In <head> tag
-  i. Detect if there is any header that doesn’t have <title> tag
-  ii. Detect if there is any header that doesn’t have <meta name=“descriptions” ... /> tag
-  iii. Detect if there is any header that doesn’t have <meta name=“keywords” ... /> tag
-4. Detect if there are more than 15 <strong> tag in HTML (15 is a value should be configurable by user)
-5. Detect if a HTML have more than one <H1> tag.
+1. Detect if there are any ```<img />``` tags without alt attribute
+2. Detect if there are any ```<a />``` tags without rel attribute
+3. In ```<head></head>``` tag
+   - Detect if there is any header that doesn’t have ```<title></title>``` tag
+   - Detect if there is any header that doesn’t have ```<meta name="descriptions" ... />``` tag
+   - Detect if there is any header that doesn’t have ```<meta name="keywords" ... />``` tag
+4. Detect if there are more than 15 ```<strong></strong>``` tag in HTML (15 is a value should be configurable by user)
+5. Detect if a HTML have more than one ```<h1></h1>``` tag.
 
 ### Installation
 

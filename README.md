@@ -42,6 +42,9 @@ Create an options object.
 
 **rules** You can use "all" to check all supported rules or you can also use array.
 
+**output** This is optional parameter, you can input "console" or a file path like as "result.txt".
+Note: output result is empty if your content passed all test cases.
+
 #### All rules
 
 ```JavaScript

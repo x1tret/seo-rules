@@ -49,7 +49,23 @@ module.exports = (params) => {
       }
     }
   }
-// console.log('index, ', output);
+
+  var out = params.output || null;
+  if (out) {
+    if (out == 'console') {
+      console.log(output);
+    } else {
+      fs.access(__dirname, fs.W_OK, function(err) {
+        if (err)
+          return Error(`Cannot write file at ${out}`);
+        fs.writeFile(out, output, function(err) {
+          if(err)
+            return console.log(err);
+        });
+      });
+    }
+  }
+
   if ( ! output)
     return true;
 

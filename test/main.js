@@ -1,5 +1,6 @@
 var tap = require('tap')
 var seo = require('../index');
+var fs = require('fs');
 
 tap.test('Requires options to be specified', function (test) {
   var options = false
@@ -128,5 +129,30 @@ This HTML without <meta name="descriptions" /> tag.
 This HTML without <meta name="keywords" /> tag.
 `;
   tap.equal(seo(options), expected);
+  test.done()
+})
+
+tap.test('Check output file success', function (test) {
+  var options = {
+    path:'test/data/invalid.html',
+    rules: 'all',
+    output: 'out.txt'
+  }
+  tap.equal(fs.existsSync(options.output), true);
+  test.done()
+})
+
+tap.test('Check output file fail', function (test) {
+  var options = {
+    path:'test/data/invalid.html',
+    rules: 'all',
+    output: '/root/out.txt'
+  }
+  expected = new Error(`Cannot write file at ${options.output}`);
+  try {
+    seo(options);
+  } catch (e) {
+    tap.equal(e, expected)
+  }
   test.done()
 })

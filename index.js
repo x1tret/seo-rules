@@ -4,70 +4,62 @@ const cheerio = require('cheerio');
 var fs = require('fs');
 var validator = require('./validator');
 
-module.exports = (params) => {
+var print_out = (content, output) => {
+  if ( ! output)
+    return content;
 
+  if (output == 'console')
+    return console.log(content);
+
+  fs.access(__dirname, fs.W_OK, function(err) {
+    if (err)
+      return Error(`Cannot write file at ${output}`);
+    fs.writeFile(output, content, function(err) {
+      if(err)
+        return console.log(err);
+    });
+  });
+}
+
+module.exports = (params) => {
 
   if ( ! params)
     return Error('Missing required input like as object');
 
-  var content = null;
   var format = params.format || 'html';
-  if ( format == 'html') {
-    if ( ! params.path)
-      return Error('Missing required params: please input a "path" for your html which you want to validate');
-    else if ( ! fs.existsSync(params.path))
-      return Error('Your file is not exist');
+  if ( format != 'html' && format != 'stream')
+    return Error('Your format is invalid');
 
-    content = fs.readFileSync(params.path, 'utf8');
-  }
+  if ( ! params.path)
+    return Error('Missing required params: please input a "path" for your html which you want to validate');
 
   var rules = params.rules;
   if ( ! rules || (rules != 'all' && ! Array.isArray(rules)) )
     return Error('Please input your rules: all | ["h1count", "img"]');
 
-  var output = '', result = null;
-  var $html = cheerio.load(content);
-  if (rules == 'all') {
-    for(var i in validator.rules) {
-      result = validator.rules[i]($html);
-      if (result !== true)
-        output += validator.get_error(i, result);
-    }
-  } else {
-    for(var i in rules) {
-      var func = rules[i];
-      if (typeof func === 'object') {
-        result = validator.rules[func.name]($html, func.option);
-        if (result !== true)
-          output += validator.get_error(func.name, result);
-      } else {
-        if ( ! (func in validator.rules))
-          return Error(`Function "${func}" is not exist`);
-        result = validator.rules[func]($html);
-        if (result !== true)
-          output += validator.get_error(func, result);
-      }
-    }
+  var output = params.output || null;
+
+  if (format == 'html') {
+    if ( ! fs.existsSync(params.path))
+      return Error('Your file is not exist');
+
+    var content = fs.readFileSync(params.path, 'utf8');
+    var $html = cheerio.load(content);
+    var result = validator.is_valid($html, rules);
+    return print_out(result, output);
   }
 
-  var out = params.output || null;
-  if (out) {
-    if (out == 'console') {
-      console.log(output);
-    } else {
-      fs.access(__dirname, fs.W_OK, function(err) {
-        if (err)
-          return Error(`Cannot write file at ${out}`);
-        fs.writeFile(out, output, function(err) {
-          if(err)
-            return console.log(err);
-        });
-      });
-    }
-  }
+  var readable = params.path;
+  if (typeof readable != 'object' || readable.constructor.name != 'ReadStream')
+    return Error('Input with stream format must be a ReadStream');
 
-  if ( ! output)
-    return true;
+  readable.on('data', (content) => {
+    var $html = cheerio.load(content);
+    var result = validator.is_valid($html, rules);
 
-  return output;
+    if (typeof output == 'object' && output.constructor.name == 'WriteStream')
+      return output.write(result, 'utf8');
+
+    return print_out(result, output);
+  });
 }

@@ -42,7 +42,7 @@ Create an options object.
 
 **rules** You can use "all" to check all supported rules or you can also use array.
 
-**output** This is optional parameter, you can input "console" or a file path like as "result.txt".
+**output** This is optional parameter, you can input "console", a Stream object or a file path like as "result.txt".
 Note: output result is empty if your content passed all test cases.
 
 #### All rules
@@ -90,6 +90,21 @@ console.log(result);
 
 ```
 
+#### Input and Output with Stream
+
+```JavaScript
+const validator = require('seo-rules')
+var readable = fs.createReadStream('test/data/invalid.html', 'utf8');
+var writable = fs.createWriteStream('output.txt', 'utf8');
+var options = {
+  format: 'stream',
+  path: readable,
+  rules: 'all',
+  output: writable
+};
+validator(options);
+
+```
 ## License
 
 [MIT](LICENSE)

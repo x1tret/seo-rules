@@ -138,8 +138,9 @@ tap.test('Check output file success', function (test) {
     rules: 'all',
     output: 'out.txt'
   }
-  tap.equal(fs.existsSync(options.output), true);
-  test.done()
+  seo(options);
+  tap.equal(fs.existsSync('out.txt'), true);
+  test.done();
 })
 
 tap.test('Check output file fail', function (test) {
@@ -154,5 +155,34 @@ tap.test('Check output file fail', function (test) {
   } catch (e) {
     tap.equal(e, expected)
   }
-  test.done()
+  test.done();
+})
+
+tap.test('Check stream with wrong input datatype', function (test) {
+  var options = {
+    format: 'stream',
+    path: true,
+    rules: 'all',
+  }
+  expected = new Error('Input with stream format must be a ReadStream');
+  try {
+    seo(options);
+  } catch (e) {
+    tap.equal(e, expected)
+  }
+  test.done();
+})
+
+tap.test('Check stream with success', function (test) {
+  var readable = fs.createReadStream('test/data/invalid.html', 'utf8');
+  var writable = fs.createWriteStream('output.txt', 'utf8');
+  var options = {
+    format: 'stream',
+    path: readable,
+    rules: 'all',
+    output: writable
+  };
+  seo(options);
+  tap.equal(fs.existsSync('output.txt'), true);
+  test.done();
 })
